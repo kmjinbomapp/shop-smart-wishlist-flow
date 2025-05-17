@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -61,7 +62,9 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
-				}
+				},
+        hotdeal: '#FF4E50',
+        wishlist: '#FF758C'
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
@@ -84,11 +87,21 @@ export default {
 					to: {
 						height: '0'
 					}
-				}
+				},
+        'pulse-scale': {
+          '0%, 100%': { transform: 'scale(1)' },
+          '50%': { transform: 'scale(1.05)' }
+        },
+        'hotdeal-pulse': {
+          '0%, 100%': { opacity: '1' },
+          '50%': { opacity: '0.7' }
+        }
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+        'pulse-scale': 'pulse-scale 1.5s infinite',
+        'hotdeal-pulse': 'hotdeal-pulse 1.2s infinite'
 			}
 		}
 	},
