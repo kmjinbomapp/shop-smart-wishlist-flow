@@ -3,7 +3,7 @@ import axios from 'axios';
 import { toast } from 'sonner';
 
 export const apiClient = axios.create({
-  baseURL: '/api', // Mock API base URL for now
+  baseURL: 'https://assignment.api.a-bly.com/api', // 실제 API 서버 주소로 변경
   timeout: 5000,
 });
 

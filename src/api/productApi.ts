@@ -4,8 +4,7 @@ import { ProductListSchema, HotdealTimeSchema } from '../schemas/productSchema';
 
 export const fetchProducts = async () => {
   try {
-    // For now, mocking the API response
-    const response = await apiClient.get('/products');
+    const response = await apiClient.get('/today/list');
     const parsed = ProductListSchema.safeParse(response.data);
     
     if (!parsed.success) {
@@ -22,8 +21,7 @@ export const fetchProducts = async () => {
 
 export const fetchHotdeals = async () => {
   try {
-    // For now, mocking the API response 
-    const response = await apiClient.get('/hotdeals');
+    const response = await apiClient.get('/hotdeal/list');
     const parsed = ProductListSchema.safeParse(response.data);
     
     if (!parsed.success) {
@@ -40,7 +38,6 @@ export const fetchHotdeals = async () => {
 
 export const fetchHotdealTime = async () => {
   try {
-    // For now, mocking the API response
     const response = await apiClient.get('/hotdeal/time');
     const parsed = HotdealTimeSchema.safeParse(response.data);
     
