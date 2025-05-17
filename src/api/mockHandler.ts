@@ -1,10 +1,8 @@
+import { http, HttpResponse } from 'msw';
+import { Product, HotdealTime } from '../schemas/productSchema';
 
-import { rest } from 'msw';
-import { setupWorker } from 'msw/browser';
-import { Product } from '../schemas/productSchema';
-
-// Mock data for our API
-const hotdeals: Product[] = [
+// Mock data
+const products: Product[] = [
   {
     id: 1,
     name: "프리미엄 블루투스 이어폰",
@@ -13,7 +11,7 @@ const hotdeals: Product[] = [
     price: 89000,
     originalPrice: 129000,
     discountRate: 31,
-    isHotDeal: true
+    isHotDeal: false
   },
   {
     id: 2,
@@ -23,7 +21,7 @@ const hotdeals: Product[] = [
     price: 450000,
     originalPrice: 600000,
     discountRate: 25,
-    isHotDeal: true
+    isHotDeal: false
   },
   {
     id: 3,
@@ -33,7 +31,7 @@ const hotdeals: Product[] = [
     price: 15000,
     originalPrice: 20000,
     discountRate: 25,
-    isHotDeal: true
+    isHotDeal: false
   },
   {
     id: 4,
@@ -43,83 +41,74 @@ const hotdeals: Product[] = [
     price: 35000,
     originalPrice: 50000,
     discountRate: 30,
+    isHotDeal: false
+  }
+];
+
+const hotdeals: Product[] = [
+  {
+    id: 5,
+    name: "스마트 워치 최신형",
+    description: "건강 관리와 알림 기능이 탑재된 스마트 워치",
+    image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30",
+    price: 129000,
+    originalPrice: 199000,
+    discountRate: 35,
+    isHotDeal: true
+  },
+  {
+    id: 6,
+    name: "무선 게이밍 마우스",
+    description: "초저지연 무선 기술의 게이밍 마우스",
+    image: "https://images.unsplash.com/photo-1615663245857-ac93bb7c39e7",
+    price: 78000,
+    originalPrice: 120000,
+    discountRate: 35,
+    isHotDeal: true
+  },
+  {
+    id: 7,
+    name: "프리미엄 커피 머신",
+    description: "바리스타급 커피를 집에서",
+    image: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085",
+    price: 249000,
+    originalPrice: 400000,
+    discountRate: 38,
+    isHotDeal: true
+  },
+  {
+    id: 8,
+    name: "휴대용 블루투스 스피커",
+    description: "강력한 사운드의 방수 스피커",
+    image: "https://images.unsplash.com/photo-1608043152269-423dbba4e7e1",
+    price: 59000,
+    originalPrice: 89000,
+    discountRate: 34,
     isHotDeal: true
   }
 ];
 
-const products: Product[] = [
-  {
-    id: 5,
-    name: "베이직 화이트 티셔츠",
-    description: "부드러운 코튼 소재의 기본 티셔츠",
-    image: "https://images.unsplash.com/photo-1618160702438-9b02ab6515c9",
-    price: 19900,
-    originalPrice: 24900,
-    discountRate: 20
-  },
-  {
-    id: 6,
-    name: "스마트 센서 무드등",
-    description: "움직임을 감지하는 스마트 조명",
-    image: "https://images.unsplash.com/photo-1721322800607-8c38375eef04",
-    price: 39000,
-    originalPrice: 45000,
-    discountRate: 13
-  },
-  {
-    id: 7,
-    name: "스테인리스 텀블러",
-    description: "보온 보냉이 뛰어난 고급 텀블러",
-    image: "https://images.unsplash.com/photo-1582562124811-c09040d0a901",
-    price: 28000,
-    originalPrice: 35000,
-    discountRate: 20
-  },
-  {
-    id: 8,
-    name: "무선 충전 마우스",
-    description: "충전 걱정 없는 무선 마우스",
-    image: "https://images.unsplash.com/photo-1493962853295-0fd70327578a",
-    price: 45000,
-    originalPrice: 60000,
-    discountRate: 25
-  }
-];
-
-// Calculate hot deal end time (2 hours from now)
+// Calculate hotdeal time
 const now = new Date();
+const startTime = new Date(now);
 const endTime = new Date(now);
-endTime.setHours(now.getHours() + 2);
+endTime.setHours(endTime.getHours() + 4); // Hotdeal ends in 4 hours
 
-// Mock handlers
+const hotdealTime: HotdealTime = {
+  startTime: startTime.toISOString(),
+  endTime: endTime.toISOString()
+};
+
 export const handlers = [
-  rest.get('/api/hotdeals', (_, res, ctx) => {
-    return res(
-      ctx.delay(500),
-      ctx.status(200),
-      ctx.json(hotdeals)
-    );
+  http.get('/api/products', () => {
+    return HttpResponse.json(products);
   }),
-  
-  rest.get('/api/products', (_, res, ctx) => {
-    return res(
-      ctx.delay(500),
-      ctx.status(200),
-      ctx.json(products)
-    );
+
+  http.get('/api/hotdeals', () => {
+    return HttpResponse.json(hotdeals);
   }),
-  
-  rest.get('/api/hotdeal/time', (_, res, ctx) => {
-    return res(
-      ctx.delay(200),
-      ctx.status(200),
-      ctx.json({
-        startTime: now.toISOString(),
-        endTime: endTime.toISOString()
-      })
-    );
+
+  http.get('/api/hotdeal-time', () => {
+    return HttpResponse.json(hotdealTime);
   })
 ];
-
-// This is for development purposes, no need to actually setup the worker
-// export const worker = setupWorker(...handlers);
